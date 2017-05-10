@@ -1,4 +1,5 @@
-InspectionTime = function(){
+'use strict';
+var InspectionTime = function(){
     const $img = $("#flashing-image"),
         $btnLeft = $("#btn-left"),
         $btnRight = $("#btn-right"),
