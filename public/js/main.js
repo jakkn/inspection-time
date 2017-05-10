@@ -19,13 +19,26 @@ var InspectionTime = function () {
 
   function handleClick(e) {
     total++;
-    if (e.data.side === activeDirection)
+    if (e.data.side === activeDirection) {
       correct++;
-    else
+      updateServerStats({number: "correct"});
+    }
+    else {
       wrong++;
+      updateServerStats({number: "wrong"});
+    }
 
     updateStats();
     displayNewImage();
+  }
+
+  function updateServerStats(data) {
+    $.ajax({
+      type: "POST",
+      url: "/logresults",
+      data: data
+    }).done(function () {
+    });
   }
 
   function updateStats() {
