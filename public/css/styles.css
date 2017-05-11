@@ -90,6 +90,8 @@ img {
 }
 
 .input-name {
+  height: 40px;
+  line-height: 40px;
   font-size: 16px;
   margin: 10px;
 }

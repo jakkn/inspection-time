@@ -6,9 +6,10 @@ var InspectionTime = function () {
     leftImage = "img/inspection-time-left.jpg",
     rightImage = "img/inspection-time-right.jpg",
     maskImage = "img/inspection-time-mask.jpg",
-    $labelCorrect = $("#label-correct"),
+    $labelCorrect = $("#label-correctClick"),
     $labelWrong = $("#label-wrong"),
     $labelTotal = $("#label-total"),
+    $labelBestTime = $("#label-best-time"),
     $slider = $("#slider"),
     $sliderLabel = $("#slider-label"),
     $nameField = $("#inputfield-name");
@@ -16,8 +17,10 @@ var InspectionTime = function () {
     correct = 0,
     wrong = 0,
     total = 0,
-    activeInterval = 150;
+    activeInterval = 150,
+    bestTime = 150;
 
+  //register event handlers
   $btnLeft.on("click", {side: "left"}, handleClick);
   $btnRight.on("click", {side: "right"}, handleClick);
   $slider.on("input", function () {
@@ -28,18 +31,25 @@ var InspectionTime = function () {
   function handleClick(e) {
     total++;
     const interval = parseInt(activeInterval),
-      name = ($nameField.val() === "" ? "test" : $nameField.val());
-    if (e.data.side === activeDirection) {
+      name = ($nameField.val() === "" ? "test" : $nameField.val()),
+      correctClick = e.data.side === activeDirection;
+
+    if (correctClick) {
       correct++;
-      updateServerStats({user: name, successful: true, activeInterval: activeInterval});
+      bestTime = Math.min(bestTime, activeInterval);
       $slider.val(interval - 1).trigger("input");
     }
     else {
       wrong++;
-      updateServerStats({user: name, successful: false, activeInterval: activeInterval});
       $slider.val(interval + 1).trigger("input");
     }
 
+    updateServerStats({
+      user: name,
+      correctClick: correctClick,
+      activeInterval: activeInterval,
+      bestTime: bestTime
+    });
     updateStats();
     displayNewImage();
   }
@@ -54,6 +64,7 @@ var InspectionTime = function () {
   }
 
   function updateStats() {
+    $labelBestTime.text(bestTime);
     $labelCorrect.text(correct);
     $labelWrong.text(wrong);
     $labelTotal.text(total);

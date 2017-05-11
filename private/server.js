@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 var createUser = function (name) {
-  const CREATE_USER = 'INSERT INTO users(name, total, correct, wrong) VALUES(\'' + name + '\', 0, 0, 0)',
+  const CREATE_USER = 'INSERT INTO users(name, total, correctClick, wrong) VALUES(\'' + name + '\', 0, 0, 0)',
     QUERY_USER = 'SELECT 1 FROM users WHERE name=\'' + name + '\'';
 
   connection.query(QUERY_USER, function (error, results, fields) {
@@ -32,15 +32,28 @@ var createUser = function (name) {
   });
 };
 
-var logEntry = function (user, successful) {
-  const valueToUpdate = successful ? "correct" : "wrong",
-    UPDATE_USER = 'UPDATE users SET ' + valueToUpdate + '=' + valueToUpdate + '+1 WHERE name=\'' + user + '\'';
+var updateUserStats = function (user, correctClick, bestTime) {
+  const valueToUpdate = correctClick ? "correct" : "wrong",
+    UPDATE_CLICK_STATS = 'UPDATE users SET ' + valueToUpdate + '=' + valueToUpdate + '+1 WHERE name=\'' + user + '\'',
+    QUERY_BEST_TIME = 'SELECT bestTime from users WHERE name=\''+user+'\'',
+    UPDATE_BEST_TIME = 'UPDATE users SET bestTime =' + bestTime + ' WHERE name=\'' + user + '\'';
 
   createUser(user);
-  connection.query(UPDATE_USER, function (error, results, fields) {
+
+  connection.query(UPDATE_CLICK_STATS, function (error, results, fields) {
     if (error)
       throw error;
   });
+
+  connection.query(QUERY_BEST_TIME, function (error, results, fields) {
+    if(bestTime < results)
+      connection.query(UPDATE_BEST_TIME, function (error, results, fields) {
+        if(error)
+          throw error;
+      });
+    if(error)
+      throw error;
+  })
 };
 
 //expose public files
@@ -54,7 +67,7 @@ app.get('/', function (req, res) {
   res.sendFile('index.html', {root: __dirname + "/../"});
 });
 app.post('/logresults', function (req, res) {
-  logEntry(req.body.user, req.body.successful == 'true');
+  updateUserStats(req.body.user, req.body.correctClick == 'true', req.body.bestTime);
   res.end();
 });
 app.listen(3000, function () {
