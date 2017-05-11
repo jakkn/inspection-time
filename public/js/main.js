@@ -8,24 +8,34 @@ var InspectionTime = function () {
     maskImage = "img/inspection-time-mask.jpg",
     $labelCorrect = $("#label-correct"),
     $labelWrong = $("#label-wrong"),
-    $labelTotal = $("#label-total");
+    $labelTotal = $("#label-total"),
+    $slider = $("#slider"),
+    $sliderLabel = $("#slider-label");
   var activeDirection = "left",
     correct = 0,
     wrong = 0,
-    total = 0;
+    total = 0,
+    activeInterval = 150;
 
   $btnLeft.on("click", {side: "left"}, handleClick);
   $btnRight.on("click", {side: "right"}, handleClick);
+  $slider.on("input", function() {
+    $sliderLabel.text(this.value + "ms");
+    activeInterval = this.value;
+  });
 
   function handleClick(e) {
     total++;
+    const interval = parseInt(activeInterval);
     if (e.data.side === activeDirection) {
       correct++;
-      updateServerStats({number: "correct"});
+      updateServerStats({successful: true, activeInterval: activeInterval});
+      $slider.val(interval-1).trigger("input");
     }
     else {
       wrong++;
-      updateServerStats({number: "wrong"});
+      updateServerStats({successful: false, activeInterval: activeInterval});
+      $slider.val(interval+1).trigger("input");
     }
 
     updateStats();
@@ -57,7 +67,7 @@ var InspectionTime = function () {
       displayImage(leftImage);
     }
 
-    setTimeout(displayImage, 300, maskImage);
+    setTimeout(displayImage, activeInterval, maskImage);
   }
 
   function displayImage(image) {

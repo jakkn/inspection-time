@@ -25,13 +25,26 @@
   <div class="img-wrapper">
     <img id="flashing-image" src="img/inspection-time-left.jpg" width="111">
   </div>
+  <div class="slider-wrapper">
+    <input class="slider" id="slider" type="range" min="0" max="300" value="150"/>
+    <label id="slider-label">150ms</label>
+  </div>
   <div class="button-wrapper">
     <div id="btn-left" class="btn">Left</div>
     <div id="btn-right" class="btn">Right</div>
   </div>
-  <div>Correct: <span id="label-correct">0</span></div>
-  <div>Wrong: <span id="label-wrong">0</span></div>
-  <div>Total: <span id="label-total">0</span></div>
+  <div class="statistics-wrapper">
+    <div class="header">
+      <div class="title">Statistics</div>
+    </div>
+    <div class="number-wrapper">Correct: <span id="label-correct">0</span></div>
+    <div class="number-wrapper">Wrong: <span id="label-wrong">0</span></div>
+    <div class="number-wrapper">Total: <span id="label-total">0</span></div>
+    <div class="input-wrapper">
+      <input class="input-name" type="text" name="name" placeholder="your name"/>
+      <div id="btn-submit" class="btn">Submit results</div>
+    </div>
+  </div>
 </div>
 <div class="footer"></div>
 
