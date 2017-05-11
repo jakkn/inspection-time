@@ -10,7 +10,8 @@ var InspectionTime = function () {
     $labelWrong = $("#label-wrong"),
     $labelTotal = $("#label-total"),
     $slider = $("#slider"),
-    $sliderLabel = $("#slider-label");
+    $sliderLabel = $("#slider-label"),
+    $nameField = $("#inputfield-name");
   var activeDirection = "left",
     correct = 0,
     wrong = 0,
@@ -19,23 +20,24 @@ var InspectionTime = function () {
 
   $btnLeft.on("click", {side: "left"}, handleClick);
   $btnRight.on("click", {side: "right"}, handleClick);
-  $slider.on("input", function() {
+  $slider.on("input", function () {
     $sliderLabel.text(this.value + "ms");
     activeInterval = this.value;
   });
 
   function handleClick(e) {
     total++;
-    const interval = parseInt(activeInterval);
+    const interval = parseInt(activeInterval),
+      name = ($nameField.val() === "" ? "test" : $nameField.val());
     if (e.data.side === activeDirection) {
       correct++;
-      updateServerStats({successful: true, activeInterval: activeInterval});
-      $slider.val(interval-1).trigger("input");
+      updateServerStats({user: name, successful: true, activeInterval: activeInterval});
+      $slider.val(interval - 1).trigger("input");
     }
     else {
       wrong++;
-      updateServerStats({successful: false, activeInterval: activeInterval});
-      $slider.val(interval+1).trigger("input");
+      updateServerStats({user: name, successful: false, activeInterval: activeInterval});
+      $slider.val(interval + 1).trigger("input");
     }
 
     updateStats();
