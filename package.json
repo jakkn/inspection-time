@@ -5,7 +5,8 @@
   "main": "public/index.html",
   "dependencies": {
     "express": "^4.15.2",
-    "body-parser": "^1.17.1"
+    "body-parser": "^1.17.1",
+    "mysql": "^2.13.0"
   },
   "devDependencies": {},
   "scripts": {
