@@ -6,7 +6,7 @@ var InspectionTime = function () {
     leftImage = "img/inspection-time-left.jpg",
     rightImage = "img/inspection-time-right.jpg",
     maskImage = "img/inspection-time-mask.jpg",
-    $labelCorrect = $("#label-correctClick"),
+    $labelCorrect = $("#label-correct"),
     $labelWrong = $("#label-wrong"),
     $labelTotal = $("#label-total"),
     $labelBestTime = $("#label-best-time"),
@@ -32,7 +32,7 @@ var InspectionTime = function () {
     total++;
     const interval = parseInt(activeInterval),
       name = ($nameField.val() === "" ? "test" : $nameField.val()),
-      correctClick = e.data.side === activeDirection;
+      correctClick = (e.data.side === activeDirection);
 
     if (correctClick) {
       correct++;
@@ -46,7 +46,7 @@ var InspectionTime = function () {
 
     updateServerStats({
       user: name,
-      correctClick: correctClick,
+      correct: correctClick,
       activeInterval: activeInterval,
       bestTime: bestTime
     });

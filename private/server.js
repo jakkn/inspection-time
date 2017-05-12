@@ -32,8 +32,8 @@ var createUser = function (name) {
   });
 };
 
-var updateUserStats = function (user, correctClick, bestTime) {
-  const valueToUpdate = correctClick ? "correct" : "wrong",
+var updateUserStats = function (user, correct, bestTime) {
+  const valueToUpdate = correct ? "correct" : "wrong",
     UPDATE_CLICK_STATS = 'UPDATE users SET ' + valueToUpdate + '=' + valueToUpdate + '+1 WHERE name=\'' + user + '\'',
     QUERY_BEST_TIME = 'SELECT bestTime from users WHERE name=\''+user+'\'',
     UPDATE_BEST_TIME = 'UPDATE users SET bestTime =' + bestTime + ' WHERE name=\'' + user + '\'';
@@ -67,7 +67,7 @@ app.get('/', function (req, res) {
   res.sendFile('index.html', {root: __dirname + "/../"});
 });
 app.post('/logresults', function (req, res) {
-  updateUserStats(req.body.user, req.body.correctClick == 'true', req.body.bestTime);
+  updateUserStats(req.body.user, req.body.correct == 'true', req.body.bestTime);
   res.end();
 });
 app.listen(3000, function () {
