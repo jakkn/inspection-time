@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 var createUser = function (name) {
-  const CREATE_USER = 'INSERT INTO users(name, total, correctClick, wrong) VALUES(\'' + name + '\', 0, 0, 0)',
+  const CREATE_USER = 'INSERT INTO users(name, correct, wrong, bestTime) VALUES(\'' + name + '\', 0, 0, 0)',
     QUERY_USER = 'SELECT 1 FROM users WHERE name=\'' + name + '\'';
 
   connection.query(QUERY_USER, function (error, results, fields) {
